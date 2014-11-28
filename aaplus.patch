@@ -1,0 +1,35 @@
+diff -ruN ref/AAGalileanMoons.cpp aaplus/AAGalileanMoons.cpp
+--- ref/AAGalileanMoons.cpp	2013-08-04 16:32:58.000000000 +0200
++++ aaplus/AAGalileanMoons.cpp	2013-12-01 17:26:53.000000000 +0100
+@@ -577,6 +577,20 @@
+   FillInPhenomenaDetails(details2.Satellite3);
+   FillInPhenomenaDetails(details2.Satellite4);
+ 
++  // gvh : copy shadow details, not accurate yet.
++  details1.Satellite1.Shadow_ApparentRectangularCoordinates.X = details2.Satellite1.ApparentRectangularCoordinates.X;
++  details1.Satellite1.Shadow_ApparentRectangularCoordinates.Y = details2.Satellite1.ApparentRectangularCoordinates.Y;
++  details1.Satellite1.Shadow_ApparentRectangularCoordinates.Z = details2.Satellite1.ApparentRectangularCoordinates.Z;
++  details1.Satellite2.Shadow_ApparentRectangularCoordinates.X = details2.Satellite2.ApparentRectangularCoordinates.X;
++  details1.Satellite2.Shadow_ApparentRectangularCoordinates.Y = details2.Satellite2.ApparentRectangularCoordinates.Y;
++  details1.Satellite2.Shadow_ApparentRectangularCoordinates.Z = details2.Satellite2.ApparentRectangularCoordinates.Z;
++  details1.Satellite3.Shadow_ApparentRectangularCoordinates.X = details2.Satellite3.ApparentRectangularCoordinates.X;
++  details1.Satellite3.Shadow_ApparentRectangularCoordinates.Y = details2.Satellite3.ApparentRectangularCoordinates.Y;
++  details1.Satellite3.Shadow_ApparentRectangularCoordinates.Z = details2.Satellite3.ApparentRectangularCoordinates.Z;
++  details1.Satellite4.Shadow_ApparentRectangularCoordinates.X = details2.Satellite4.ApparentRectangularCoordinates.X;
++  details1.Satellite4.Shadow_ApparentRectangularCoordinates.Y = details2.Satellite4.ApparentRectangularCoordinates.Y;
++  details1.Satellite4.Shadow_ApparentRectangularCoordinates.Z = details2.Satellite4.ApparentRectangularCoordinates.Z;
++
+   //Finally transfer the required values from details2 to details1
+   details1.Satellite1.bInEclipse = details2.Satellite1.bInOccultation;
+   details1.Satellite2.bInEclipse = details2.Satellite2.bInOccultation;
+diff -ruN ref/AAGalileanMoons.h aaplus/AAGalileanMoons.h
+--- ref/AAGalileanMoons.h	2013-08-04 16:32:58.000000000 +0200
++++ aaplus/AAGalileanMoons.h	2013-12-01 17:27:48.000000000 +0100
+@@ -63,6 +63,7 @@
+   double          r;
+   CAA3DCoordinate TrueRectangularCoordinates;
+   CAA3DCoordinate ApparentRectangularCoordinates;
++  CAA3DCoordinate Shadow_ApparentRectangularCoordinates; //gvh
+   bool            bInTransit;
+   bool            bInOccultation;
+   bool            bInEclipse;
