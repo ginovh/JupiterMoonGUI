@@ -2,3 +2,8 @@ todo.txt
 aaplus
 a.out
 *~
+Makefile
+*.o
+jupitermoon
+moc_*.*
+ui_jupitermoon.h
