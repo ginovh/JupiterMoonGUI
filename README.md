@@ -4,6 +4,7 @@
 
 Calculates next/prev interesting events. It also shows when GRS is in front. I use this tool mainly to find out "interesting" times to picture Jupiter (e.g. shadow transit + GRS in front etc.)
 
+![Screenshot](Screenshot.png)
 
 **Dependencies :**
 - Qt 4.8.0 and above 
