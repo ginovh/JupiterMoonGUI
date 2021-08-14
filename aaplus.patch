@@ -23,13 +23,13 @@ diff -ruN ref/AAGalileanMoons.cpp aaplus/AAGalileanMoons.cpp
    details1.Satellite1.bInEclipse = details2.Satellite1.bInOccultation;
    details1.Satellite2.bInEclipse = details2.Satellite2.bInOccultation;
 diff -ruN ref/AAGalileanMoons.h aaplus/AAGalileanMoons.h
---- ref/AAGalileanMoons.h	2013-08-04 16:32:58.000000000 +0200
-+++ aaplus/AAGalileanMoons.h	2013-12-01 17:27:48.000000000 +0100
-@@ -63,6 +63,7 @@
-   double          r;
+--- ref/AAGalileanMoons.h	2021-01-09 11:55:28.000000000 +0100
++++ aaplus/AAGalileanMoons.h	2021-08-14 12:38:44.832952432 +0200
+@@ -70,6 +70,7 @@
+   double r;
    CAA3DCoordinate TrueRectangularCoordinates;
    CAA3DCoordinate ApparentRectangularCoordinates;
 +  CAA3DCoordinate Shadow_ApparentRectangularCoordinates; //gvh
-   bool            bInTransit;
-   bool            bInOccultation;
-   bool            bInEclipse;
+   bool bInTransit;
+   bool bInOccultation;
+   bool bInEclipse;

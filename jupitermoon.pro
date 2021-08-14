@@ -8,8 +8,8 @@ DEPENDPATH += .
 CONFIG += debug
 
 INCLUDEPATH += . aaplus/
-QMAKE_RPATHDIR += aaplus/lib
-LIBS += -Laaplus/lib -laaplus
+QMAKE_RPATHDIR += aaplus/build/lib
+LIBS += -Laaplus/build/lib -laaplus
 
 # Input
 HEADERS += jupitermoon.h astroDateTime.h

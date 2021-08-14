@@ -4,13 +4,14 @@
 #include <QtGui>
 #include <iostream>
 #include <bitset>
+#include <algorithm>
 
 #include "jupitermoon.h"
 
 jupitermoon::jupitermoon(QWidget *parent)
   : QDialog(parent)
-  , scale_p(1)
   , signalMapper(this)
+  , scale_p(1)
 {
   setupUi(this);
 
@@ -42,16 +43,18 @@ void jupitermoon::resetDate()
 
 void jupitermoon::updateGUI() {
 
-  CAAPhysicalJupiterDetails JupiterPhyDetails = CAAPhysicalJupiter::Calculate(date.Julian());
+  CAAPhysicalJupiterDetails JupiterPhyDetails = CAAPhysicalJupiter::Calculate(date.Julian(), true);
   QString temp_str;
   temp_str = "CMII: " + QString::number(JupiterPhyDetails.Apparentw2);
   CMII->setText(temp_str);
 
-  // assume GRS is visible 50 degrees from meridian
+  // assume GRS is visible 50 degrees from meridian ( with mewlon and good seeing condtions this will be more like 55 degrees)
   // 01/12/2014 : 229
+  // 14/08/2014 : 004
   // see also: http://jupos.privat.t-online.de
-  const int redspotCMII = 229; 
-  if ( abs(JupiterPhyDetails.Apparentw2 - redspotCMII) < 50 ){
+  const int redspotCMII = 4;
+  const int dist = abs(JupiterPhyDetails.Apparentw2 - redspotCMII);
+  if ( std::min(360-dist,dist) < 50 ) {
       CMII->setStyleSheet("QLabel { background-color : red; color : blue; }");
     } else { //reset stylesheet
       CMII->setStyleSheet(origstyleSheet);
@@ -59,8 +62,8 @@ void jupitermoon::updateGUI() {
 
   // Turnhout -4.95, 51.32
   // to calculate altitude of saturn and sun
-  CAAEllipticalPlanetaryDetails JupiterDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::JUPITER);
-  CAAEllipticalPlanetaryDetails SunDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::SUN);
+  CAAEllipticalPlanetaryDetails JupiterDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::EllipticalObject::JUPITER, true);
+  CAAEllipticalPlanetaryDetails SunDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::EllipticalObject::SUN, true);
   double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
   double LongtitudeAsHourAngle = CAACoordinateTransformation::DegreesToHours(-4.95);
 
@@ -108,7 +111,7 @@ enum jupevent {
 };
 
 double calc_sun_h(CAADate date){
-  CAAEllipticalPlanetaryDetails SunDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::SUN);
+  CAAEllipticalPlanetaryDetails SunDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::EllipticalObject::SUN, true);
   double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
   double LongtitudeAsHourAngle = CAACoordinateTransformation::DegreesToHours(CAACoordinateTransformation::DMSToDegrees(-4, 59, 0));
 
@@ -119,7 +122,7 @@ double calc_sun_h(CAADate date){
 }
 
 double calc_jup_h(CAADate date){
-  CAAEllipticalPlanetaryDetails PDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::JUPITER);
+  CAAEllipticalPlanetaryDetails PDetails = CAAElliptical::Calculate(date.Julian(), CAAElliptical::EllipticalObject::JUPITER, true);
   double AST = CAASidereal::ApparentGreenwichSiderealTime(date.Julian());
   double LongtitudeAsHourAngle = CAACoordinateTransformation::DegreesToHours(CAACoordinateTransformation::DMSToDegrees(-4, 59, 0));
 
@@ -137,7 +140,7 @@ void jupitermoon::calculate_next(int id) {
   CAAGalileanMoonsDetails GalileanDetails;
 
   // First calculate if event was already in progress
-  GalileanDetails = CAAGalileanMoons::Calculate(date.Julian());
+  GalileanDetails = CAAGalileanMoons::Calculate(date.Julian(), true);
   if (GalileanDetails.Satellite1.bInShadowTransit ) {
       jup_events[SAT1_SHADOWTRANSIT] = true;
     }
@@ -172,7 +175,7 @@ void jupitermoon::calculate_next(int id) {
           date.Set( date.Julian() - 1.0/(24*60) ,true); // 1 min
         }
       if ( (calc_sun_h(date) < 0.0) && (calc_jup_h(date) > 10.0) ) {
-          GalileanDetails = CAAGalileanMoons::Calculate(date.Julian());
+          GalileanDetails = CAAGalileanMoons::Calculate(date.Julian(), true);
           if (GalileanDetails.Satellite1.bInShadowTransit ) {
               if (!jup_events[SAT1_SHADOWTRANSIT]) {
                   new_event_happened = true;
@@ -259,25 +262,25 @@ void jupitermoon::updateStep()
 void jupitermoon::updateWeekday()
 {
   switch ( date.DayOfWeek() ) {
-    case CAADate::SUNDAY :
+    case CAADate::DAY_OF_WEEK::SUNDAY :
       WeekdayLabel->setText("Sunday");
       break;
-    case CAADate::MONDAY :
+    case CAADate::DAY_OF_WEEK::MONDAY :
       WeekdayLabel->setText("Monday");
       break;
-    case CAADate::TUESDAY :
+    case CAADate::DAY_OF_WEEK::TUESDAY :
       WeekdayLabel->setText("Tuesday");
       break;
-    case CAADate::WEDNESDAY :
+    case CAADate::DAY_OF_WEEK::WEDNESDAY :
       WeekdayLabel->setText("Wednesday");
       break;
-    case CAADate::THURSDAY :
+    case CAADate::DAY_OF_WEEK::THURSDAY :
       WeekdayLabel->setText("Thursday");
       break;
-    case CAADate::FRIDAY :
+    case CAADate::DAY_OF_WEEK::FRIDAY :
       WeekdayLabel->setText("Friday");
       break;
-    case CAADate::SATURDAY :
+    case CAADate::DAY_OF_WEEK::SATURDAY :
       WeekdayLabel->setText("Saturday");
       break;
     default:
@@ -324,7 +327,7 @@ void jupitermoon::paintEvent(QPaintEvent *event) {
   QPoint jup(0,0);
   painter.drawEllipse(m.map(jup),10*scale_p,10*scale_p); // uses const QPoint & center !
 
-  CAAGalileanMoonsDetails GalileanDetails = CAAGalileanMoons::Calculate(date.Julian());
+  CAAGalileanMoonsDetails GalileanDetails = CAAGalileanMoons::Calculate(date.Julian(), true);
 
   // draw satellites, x/y *10 because size jup = 10
   if (!(GalileanDetails.Satellite1.bInEclipse || GalileanDetails.Satellite1.bInOccultation ) ) {
