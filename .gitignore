@@ -7,3 +7,5 @@ Makefile
 jupitermoon
 moc_*.*
 ui_jupitermoon.h
+.qmake.stash
+*.pro.user
