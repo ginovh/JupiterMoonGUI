@@ -8,4 +8,5 @@ jupitermoon
 moc_*.*
 ui_jupitermoon.h
 .qmake.stash
+.qtc_clangd
 *.pro.user
