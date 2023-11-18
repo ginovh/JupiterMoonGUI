@@ -49,10 +49,8 @@ void jupitermoon::updateGUI() {
   CMII->setText(temp_str);
 
   // assume GRS is visible 50 degrees from meridian ( with mewlon and good seeing condtions this will be more like 55 degrees)
-  // 01/12/2014 : 229
-  // 14/08/2014 : 004
   // see also: http://jupos.privat.t-online.de
-  const int redspotCMII = 4;
+  const int redspotCMII = 45; // Nov. 2023
   const int dist = abs(JupiterPhyDetails.Apparentw2 - redspotCMII);
   if ( std::min(360-dist,dist) < 50 ) {
       CMII->setStyleSheet("QLabel { background-color : red; color : blue; }");

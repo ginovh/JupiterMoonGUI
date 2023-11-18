@@ -2,7 +2,6 @@
 #include <QDialog>
 
 #include "jupitermoon.h"
-#include "astroDateTime.h"
 
 int main(int argc, char *argv[])
 {
