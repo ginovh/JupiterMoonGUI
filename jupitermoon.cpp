@@ -38,7 +38,7 @@ jupitermoon::jupitermoon(QWidget *parent)
 void jupitermoon::resetDate()
 {
   // automatically calls updateDateTime();
-  dateTimeEdit->setDateTime( QDateTime::currentDateTime() );
+  dateTimeEdit->setDateTime( QDateTime::currentDateTimeUtc() );
 }
 
 void jupitermoon::updateGUI() {
