@@ -16,9 +16,11 @@ You may find comments in the code refering to this book.
 **Build:**
 ```
 ./getaaplus.bash
+mkdir build; cd build/
+qmake ../jupitermoon.pro
+make -j
+
 make distclean # to clean repo artifacts before pushing to github
-qmake jupitermoon.pro
-make -j4
 make clean  # remove intermediate files but leaves app
 ```
 

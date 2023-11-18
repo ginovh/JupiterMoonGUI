@@ -7,12 +7,14 @@ TEMPLATE = app
 DEPENDPATH += .
 CONFIG += debug
 
-INCLUDEPATH += . aaplus/
-QMAKE_RPATHDIR += aaplus/build/lib
-LIBS += -Laaplus/build/lib -laaplus
+INCLUDEPATH += . $$_PRO_FILE_PWD_/aaplus/
+QMAKE_RPATHDIR += $$_PRO_FILE_PWD_/aaplus/build/lib
+LIBS += -L$$_PRO_FILE_PWD_/aaplus/build/lib -laaplus
 
 # Input
 HEADERS += jupitermoon.h astroDateTime.h
 FORMS += jupitermoon.ui
 SOURCES += main.cpp jupitermoon.cpp astroDateTime.cpp
 QT += widgets
+
+message($$_PRO_FILE_PWD_)
